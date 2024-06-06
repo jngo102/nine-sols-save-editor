@@ -1,53 +1,42 @@
 <template>
   <main>
-    <TabMenu :model="tabItems" />
     <div class="p-2">
-      <div v-show="currentTab === 0">
-        <div class="sticky">
-          <h3>Upload Save File</h3>
-          <FileUpload
-            id="upload-save-file-input  "
-            accept="text/plain"
-            :max-file-size="Math.pow(2, 23)"
-            :show-cancel-button="false"
-            :show-upload-button="false"
-            @select="uploadSaveFile"
-          >
-            <template #empty>
-              Upload or drag-and-drop your save file, named "flags.txt" here.
-            </template>
-            <template #content="{ files }">
-              <div v-if="files.length > 0">
-                <p>Save file uploaded.</p>
-              </div>
-            </template>
-          </FileUpload>
-        </div>
-        <div v-for="flag in flagDetailsList" :key="flag.id">
-          <FlagEditor
-            :flag-id="flag.id"
-            :flag-title="flag.title"
-            :flag-value="flag.value"
-            :flag-description="flag.description"
-            @value-changed="(newValue: FlagType) => updateFlagValue(flag.id, newValue)"
-          />
-          <br />
-        </div>
-        <Button
-          label="Download Save"
-          icon="pi pi-download"
-          class="p-button-success"
-          @click="downloadSave"
+      <div class="sticky">
+        <h3>Upload Save File</h3>
+        <FileUpload
+          id="upload-save-file-input  "
+          accept="text/plain"
+          :max-file-size="Math.pow(2, 23)"
+          :show-cancel-button="false"
+          :show-upload-button="false"
+          @select="uploadSaveFile"
+        >
+          <template #empty>
+            Upload or drag-and-drop your save file, named "flags.txt" here.
+          </template>
+          <template #content="{ files }">
+            <div v-if="files.length > 0">
+              <p>Save file uploaded.</p>
+            </div>
+          </template>
+        </FileUpload>
+      </div>
+      <div v-for="flag in flagDetailsList" :key="flag.id">
+        <FlagEditor
+          :flag-id="flag.id"
+          :flag-title="flag.title"
+          :flag-value="flag.value"
+          :flag-description="flag.description"
+          @value-changed="(newValue: FlagType) => updateFlagValue(flag.id, newValue)"
         />
+        <br />
       </div>
-      <!-- <div v-if="currentTab === 1">
-        <h3>Encrypted save file contents:</h3>
-        <Textarea v-model="saveFileContents" class="w-full" readonly auto-resize />
-      </div>
-      <div v-else-if="currentTab === 2">
-        <h3>Decrypted JSON contents:</h3>
-        <Textarea v-model="saveJsonString" class="w-full" readonly auto-resize />
-      </div> -->
+      <Button
+        label="Download Save"
+        icon="pi pi-download"
+        class="p-button-success"
+        @click="downloadSave"
+      />
     </div>
   </main>
 </template>
@@ -72,22 +61,6 @@ interface FlagDetails {
 
 const KEY = '1234567812345678';
 const IV = '1234567812345678';
-
-const currentTab = ref<number>(0);
-const tabItems = ref([
-  {
-    label: 'Home',
-    command: () => (currentTab.value = 0)
-  },
-  {
-    label: 'Raw Save',
-    command: () => (currentTab.value = 1)
-  },
-  {
-    label: 'Save JSON',
-    command: () => (currentTab.value = 2)
-  }
-]);
 
 const saveFileContents = ref<string>('');
 
