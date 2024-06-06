@@ -138,7 +138,7 @@ const updateFlagValue = (flagId: string, newValue: FlagType): void => {
   let flag = flagDetailsList.value.find((f) => f.id === flagId);
   if (flag) {
     const flagIndex = flagDetailsList.value.indexOf(flag);
-    if (flagDetailsList.value[flagIndex].value['field' as keyof Object]) {
+    if (typeof flag.value === 'object' && flag.value['field' as keyof Object]) {
       console.log('Updating flag object ', flag.id, ' with value ', newValue);
       flagDetailsList.value[flagIndex].value = { field: newValue };
     } else {
