@@ -10,6 +10,5 @@ declare module 'vue' {
     Button: typeof import('primevue/button')['default']
     FlagEditor: typeof import('./src/components/FlagEditor.vue')['default']
     TabMenu: typeof import('primevue/tabmenu')['default']
-    Textarea: typeof import('primevue/textarea')['default']
   }
 }

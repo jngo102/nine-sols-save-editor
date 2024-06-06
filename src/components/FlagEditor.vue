@@ -108,7 +108,7 @@ const updateValueObject = (key: string, newValue: ObjectFlagFieldType): void => 
             />
             <InputNumber
               v-else-if="typeof value === 'number'"
-              :model-value="currentValueObject[key]"
+              :model-value="Number(currentValueObject[key])"
               class="flag-field-number"
               :min-fraction-digits="0"
               :max-fraction-digits="8"
@@ -117,9 +117,9 @@ const updateValueObject = (key: string, newValue: ObjectFlagFieldType): void => 
             />
             <InputText
               v-else-if="typeof value === 'string'"
-              :model-value="currentValueObject[key]"
+              :model-value="String(currentValueObject[key])"
               class="flag-field-string"
-              @update:model-value="(value: string) => updateValueObject(key, value)"
+              @update:model-value="(value?: string) => updateValueObject(key, value ?? '')"
             />
           </span>
         </div>
