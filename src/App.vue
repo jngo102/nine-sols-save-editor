@@ -91,9 +91,12 @@ const tabItems = ref([
 
 const saveFileContents = ref<string>('');
 
-const saveJsonString = computed((): string => decrypt(saveFileContents.value));
-const saveJson = computed(
-  (): Object => (saveJsonString.value.length > 0 ? JSON.parse(saveJsonString.value) : {})
+const saveJsonString = computed((): string => {
+  const saveJson = decrypt(saveFileContents.value);
+  return saveJson;
+});
+const saveJson = computed((): object =>
+  saveJsonString.value.length > 0 ? JSON.parse(saveJsonString.value) : {}
 );
 const flagDetailsList = ref<Array<FlagDetails>>([]);
 
@@ -128,10 +131,7 @@ const decrypt = (text: string): string => {
     padding: CryptoJS.pad.Pkcs7,
     mode: CryptoJS.mode.CBC
   });
-  return (
-    decryptor.process(textBase64).toString(CryptoJS.enc.Utf8) +
-    decryptor.finalize().toString(CryptoJS.enc.Utf8)
-  );
+  return decryptor.finalize(textBase64).toString(CryptoJS.enc.Utf8);
 };
 
 const updateFlagValue = (flagId: string, newValue: FlagType): void => {
@@ -139,7 +139,6 @@ const updateFlagValue = (flagId: string, newValue: FlagType): void => {
   if (flag) {
     const flagIndex = flagDetailsList.value.indexOf(flag);
     if (typeof flag.value === 'object' && flag.value['field' as keyof Object]) {
-      console.log('Updating flag object ', flag.id, ' with value ', newValue);
       flagDetailsList.value[flagIndex].value = { field: newValue };
     } else {
       flagDetailsList.value[flagIndex].value = newValue;
@@ -148,8 +147,12 @@ const updateFlagValue = (flagId: string, newValue: FlagType): void => {
 };
 
 const downloadSave = (): void => {
-  const saveJsonString = JSON.stringify(saveJson.value);
-  const encryptedSave = encrypt(saveJsonString);
+  const flagJson: { [key: string]: FlagType } = {};
+  flagDetailsList.value.forEach((flag) => {
+    flagJson[flag.id] = flag.value;
+  });
+  const flagJsonString = JSON.stringify(flagJson);
+  const encryptedSave = encrypt(flagJsonString);
   const blob = new Blob([encryptedSave], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -168,10 +171,7 @@ const encrypt = (json: string): string => {
     padding: CryptoJS.pad.Pkcs7,
     mode: CryptoJS.mode.CBC
   });
-  return (
-    encryptor.process(text).toString(CryptoJS.enc.Base64) +
-    encryptor.finalize().toString(CryptoJS.enc.Base64)
-  );
+  return encryptor.finalize(text).toString(CryptoJS.enc.Base64);
 };
 </script>
 
