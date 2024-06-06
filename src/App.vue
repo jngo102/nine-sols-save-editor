@@ -1,11 +1,11 @@
 <template>
   <main>
-    <div class="p-2">
-      <div class="sticky">
-        <h3>Upload Save File</h3>
+    <Card class="p-2 m-2">
+      <template #header>
         <FileUpload
           id="upload-save-file-input  "
           accept="text/plain"
+          class="sticky"
           :max-file-size="Math.pow(2, 23)"
           :show-cancel-button="false"
           :show-upload-button="false"
@@ -16,28 +16,40 @@
           </template>
           <template #content="{ files }">
             <div v-if="files.length > 0">
-              <p>Save file uploaded.</p>
+              <p>Save file uploaded: {{ files[0].name }}</p>
             </div>
           </template>
         </FileUpload>
-      </div>
-      <div v-for="flag in flagDetailsList" :key="flag.id">
-        <FlagEditor
-          :flag-id="flag.id"
-          :flag-title="flag.title"
-          :flag-value="flag.value"
-          :flag-description="flag.description"
-          @value-changed="(newValue: FlagType) => updateFlagValue(flag.id, newValue)"
-        />
-        <br />
-      </div>
-      <Button
-        label="Download Save"
-        icon="pi pi-download"
-        class="p-button-success"
-        @click="downloadSave"
-      />
-    </div>
+      </template>
+      <template #content>
+        <div class="overflow-y-scroll max-h-30rem">
+          <FlagEditor
+            v-for="flag in flagDetailsList"
+            :key="flag.id"
+            :flag-id="flag.id"
+            :flag-title="flag.title"
+            :flag-value="flag.value"
+            :flag-description="flag.description"
+            @value-changed="(newValue: FlagType) => updateFlagValue(flag.id, newValue)"
+          />
+        </div>
+      </template>
+      <template #footer>
+        <div class="sticky">
+          <Button
+            icon="pi pi-download"
+            label="Download Save"
+            class="p-button-success"
+            @click="downloadSave"
+          />
+        </div>
+      </template>
+    </Card>
+    <span>
+      <a :href="packageJson.repository.url">
+        <i class="pi pi-github"> Source Code </i>
+      </a>
+    </span>
   </main>
 </template>
 
@@ -45,11 +57,13 @@
 import { computed, ref } from 'vue';
 import CryptoJS from 'crypto-js';
 
+import Card from 'primevue/card';
 import FileUpload, { type FileUploadSelectEvent } from 'primevue/fileupload';
 
 import FlagEditor from '@/components/FlagEditor.vue';
 import { type FlagType } from '@/components/types';
 
+import packageJson from '../package.json';
 import configJson from './assets/configs/config.json';
 
 interface FlagDetails {

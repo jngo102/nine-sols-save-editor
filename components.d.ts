@@ -8,6 +8,8 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
+    Card: typeof import('primevue/card')['default']
+    DeferredContent: typeof import('primevue/deferredcontent')['default']
     FlagEditor: typeof import('./src/components/FlagEditor.vue')['default']
     TabMenu: typeof import('primevue/tabmenu')['default']
   }

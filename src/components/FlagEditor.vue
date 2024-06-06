@@ -74,8 +74,10 @@ const updateValueObject = (key: string, newValue: ObjectFlagFieldType): void => 
 <template>
   <div class="flag-editor">
     <div>
-      <h4>Title: {{ props.flagTitle }}</h4>
-      <p>Description: {{ props.flagDescription }}</p>
+      <p>
+        Title: <b>{{ props.flagTitle }}</b>
+      </p>
+      <p v-if="props.flagDescription.length > 0">Description: {{ props.flagDescription }}</p>
       <small>ID: {{ props.flagId }}</small>
     </div>
     <div>
@@ -98,7 +100,7 @@ const updateValueObject = (key: string, newValue: ObjectFlagFieldType): void => 
       <div v-else-if="valueIsObject">
         <div v-for="[key, value] in Object.entries(currentValueObject)" :key="key">
           <span class="inline">
-            <p>{{ key }}:</p>
+            {{ key }}:
             <Checkbox
               v-if="typeof value === 'boolean'"
               :model-value="currentValueObject[key]"
