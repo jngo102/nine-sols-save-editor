@@ -103,14 +103,14 @@ const updateValueObject = (key: string, newValue: ObjectFlagFieldType): void => 
             {{ key }}:
             <Checkbox
               v-if="typeof value === 'boolean'"
-              :model-value="currentValueObject[key]"
+              v-model="currentValueObject[key]"
               binary
               class="flag-field-bool"
               @update:model-value="(value: boolean) => updateValueObject(key, value)"
             />
             <InputNumber
               v-else-if="typeof value === 'number'"
-              :model-value="Number(currentValueObject[key])"
+              v-model="currentValueObject[key]"
               class="flag-field-number"
               :min-fraction-digits="0"
               :max-fraction-digits="8"
@@ -119,7 +119,7 @@ const updateValueObject = (key: string, newValue: ObjectFlagFieldType): void => 
             />
             <InputText
               v-else-if="typeof value === 'string'"
-              :model-value="String(currentValueObject[key])"
+              v-model="currentValueObject[key]"
               class="flag-field-string"
               @update:model-value="(value?: string) => updateValueObject(key, value ?? '')"
             />
