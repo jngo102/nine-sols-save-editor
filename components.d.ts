@@ -9,8 +9,10 @@ declare module 'vue' {
   export interface GlobalComponents {
     Button: typeof import('primevue/button')['default']
     Card: typeof import('primevue/card')['default']
-    DeferredContent: typeof import('primevue/deferredcontent')['default']
+    Checkbox: typeof import('primevue/checkbox')['default']
+    FileUpload: typeof import('primevue/fileupload')['default']
     FlagEditor: typeof import('./src/components/FlagEditor.vue')['default']
-    TabMenu: typeof import('primevue/tabmenu')['default']
+    InputNumber: typeof import('primevue/inputnumber')['default']
+    InputText: typeof import('primevue/inputtext')['default']
   }
 }
